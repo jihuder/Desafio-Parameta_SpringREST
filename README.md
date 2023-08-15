@@ -1,4 +1,4 @@
-# ----------------------------PARAMETA-----------------------------
+# ----------------------------PARAMETA----------------------------
 ## Proyecto de Prueba Técnica - Desarrollo de API REST con Spring Boot
 
 Este proyecto de prueba técnica que aborda el desarrollo
