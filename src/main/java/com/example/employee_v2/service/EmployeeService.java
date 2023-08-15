@@ -14,21 +14,25 @@ public class EmployeeService {
 
     //method read all
     public List<Employee> getEmployees(){
+
         return employeeRepository.findAll();
     }
 
     //method read
     public Optional<Employee> getEmployee(Long id){
+
         return employeeRepository.findById(id);
     }
 
     //method Save and Update
-    public void saveOrUpdate(Employee employee){
-        employeeRepository.save(employee);
+    public Employee saveOrUpdate(Employee employee){
+
+        return employeeRepository.save(employee);
     }
 
     //method Delete
     public void delete(Long id){
+
         employeeRepository.deleteById(id);
     }
 }
