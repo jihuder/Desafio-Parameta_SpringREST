@@ -1,32 +1,49 @@
 package com.example.employee_v2.entity;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import java.util.Date;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="employee_v2")
+@Validated
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Name cannot be empty")
     private String name;
+
+    @NotBlank(message = "The last name cannot be empty")
     private String last_name;
+
+    @NotBlank(message = "The document type cannot be empty")
     private String type_of_document;
+
+    @NotBlank(message = "The document number cannot be empty")
     private String document_number;
+
+    @NotNull
     @Temporal(TemporalType.DATE)
     private Date date_of_birth;
+    @NotNull
     @Temporal(TemporalType.DATE)
     private Date date_of_linkage;
+
+    @NotBlank(message = "The position cannot be empty")
     private String position;
+    @NotNull(message = "The salary cannot be empty")
     private Double salary;
     @Transient
     private String vinculationTime;

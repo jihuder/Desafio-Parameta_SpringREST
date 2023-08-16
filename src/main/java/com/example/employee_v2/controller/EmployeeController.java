@@ -2,19 +2,23 @@ package com.example.employee_v2.controller;
 
 import com.example.employee_v2.entity.Employee;
 import com.example.employee_v2.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.time.Period;
 import java.time.LocalDate;
 
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v2/employees")
+@Validated
 public class EmployeeController {
 
     @Autowired
@@ -33,7 +37,14 @@ public class EmployeeController {
 
     // Cread
     @PostMapping
-    public ResponseEntity<Employee> saveUpdate(@RequestBody Employee employee){
+    public ResponseEntity<Employee> saveUpdate(@Valid @RequestBody Employee employee){
+        Date edad = employee.getDate_of_birth();
+        LocalDate edadLocal = edad.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate currentDate = LocalDate.now();
+        Period tiempo = Period.between(edadLocal, currentDate);
+        if (tiempo.getYears() <= 18){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(employee);
+        }
         Employee employeeBase = employeeService.saveOrUpdate(employee);
         if (employeeBase.getDate_of_birth()!= null) {
             LocalDate birthDate = employeeBase.getDate_of_birth().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -59,8 +70,8 @@ public class EmployeeController {
 
     //Delete by ID
     @DeleteMapping("/{employeeId}")
-    public void delete(@PathVariable("employeeId") Long employeeId){
-
+    public ResponseEntity<String> delete(@PathVariable("employeeId") Long employeeId){
         employeeService.delete(employeeId);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Delete");
     }
 }
